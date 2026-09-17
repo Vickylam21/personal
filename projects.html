@@ -11,16 +11,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
       * { box-sizing: border-box; }
-      body { margin: 0; background: #000; color: #fff; font-family: 'Space Grotesk', Arial, sans-serif; }
+      body { margin: 0; background: #2B7AB3; color: #F2ECD2; font-family: 'Space Grotesk', Arial, sans-serif; }
       .shell { width: min(100%, 1600px); margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 5rem); }
       .title { font-size: clamp(5rem, 17vw, 17rem); line-height: .72; letter-spacing: -.1em; font-weight: 700; }
-      .line { border-color: #242424; }
+      .line { border-color: #B1E0F0; }
       a { color: inherit; }
+      [class~="text-white"] { color: #F2ECD2 !important; }
+      [class~="text-[#aaa]"] { color: #B1E0F0 !important; }
     </style>
   </head>
   <body>
     <header class="shell flex items-center justify-between border-b line py-5 text-xs uppercase tracking-[.18em] text-[#aaa]">
-      <a href="index.html" class="text-white no-underline">LIN / 00</a><div class="flex items-center gap-5"><button class="language-switch text-white" type="button">繁中 / EN</button><a href="index.html" data-zh="關閉 ↗" data-en="Close ↗">Close ↗</a></div>
+      <a href="index.html" class="text-[#F2ECD2] no-underline">LIN / 00</a><div class="flex items-center gap-5"><button class="language-switch text-[#FFE57C]" type="button">繁中 / EN</button><a href="index.html" data-zh="關閉 ↗" data-en="Close ↗">Close ↗</a></div>
     </header>
     <main class="shell">
       <section class="min-h-[75vh] py-28 sm:py-48"><p class="mb-24 text-xs uppercase tracking-[.2em] text-[#aaa]" data-zh="01 / 項目集" data-en="01 / Selected work">01 / Selected work</p><h1 class="title uppercase" data-zh="項<br />目集" data-en="Pro<br />jects">Pro<br />jects</h1></section>

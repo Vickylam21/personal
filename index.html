@@ -25,10 +25,11 @@
 
     <style>
       :root {
-        --black: #000000;
-        --white: #ffffff;
-        --gray: #aaaaaa;
-        --line: #242424;
+        --black: #2B7AB3;
+        --white: #F2ECD2;
+        --gray: #B1E0F0;
+        --line: #B1E0F0;
+        --accent: #FFE57C;
       }
 
       * {
@@ -48,7 +49,7 @@
       }
 
       ::selection {
-        background: var(--white);
+        background: var(--accent);
         color: var(--black);
       }
 
@@ -117,6 +118,22 @@
         text-underline-offset: 0.2em;
       }
 
+      [class~="text-white"] {
+        color: var(--white) !important;
+      }
+
+      [class~="text-[#aaaaaa]"] {
+        color: var(--gray) !important;
+      }
+
+      [class~="border-[#242424]"] {
+        border-color: var(--line) !important;
+      }
+
+      [class~="hover:text-[#aaaaaa]"]:hover {
+        color: var(--accent) !important;
+      }
+
       .rain-layer {
         position: fixed;
         z-index: 5;
@@ -150,12 +167,12 @@
         content: '';
         position: absolute;
         inset: 0;
-        background: rgba(0, 0, 0, 0.78);
+        background: rgba(43, 122, 179, 0.78);
       }
 
       .name-pop__text {
         position: relative;
-        color: var(--white);
+        color: var(--accent);
         font-size: clamp(4.5rem, 18vw, 18rem);
         line-height: 0.72;
         letter-spacing: -0.1em;
@@ -186,16 +203,16 @@
       .scroll-book__cover {
         min-height: 9rem;
         padding: 1rem;
-        border: 1px solid var(--white);
+        border: 1px solid var(--accent);
         background: var(--black);
-        box-shadow: -8px 8px 0 var(--white);
+        box-shadow: -8px 8px 0 var(--accent);
       }
 
       .scroll-book__page {
         display: none;
         min-height: 9rem;
         padding: 1rem;
-        border: 1px solid var(--white);
+        border: 1px solid var(--accent);
         background: var(--black);
       }
 

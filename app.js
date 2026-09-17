@@ -112,8 +112,8 @@
       drop.lastFrame = now;
       const opacity = Math.sin(Math.PI * Math.min(progress, 1)) * 0.35;
       const trail = rainContext.createLinearGradient(drop.x, drop.y - drop.length, drop.x, drop.y);
-      trail.addColorStop(0, 'rgba(255, 255, 255, 0)');
-      trail.addColorStop(1, `rgba(255, 255, 255, ${opacity})`);
+      trail.addColorStop(0, 'rgba(242, 236, 210, 0)');
+      trail.addColorStop(1, `rgba(242, 236, 210, ${opacity})`);
       rainContext.beginPath();
       rainContext.strokeStyle = trail;
       rainContext.lineWidth = 0.6;
