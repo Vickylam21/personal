@@ -282,10 +282,11 @@
 
     <header class="site-shell flex items-center justify-between border-b hairline py-5 text-xs uppercase tracking-[0.18em] text-[#aaaaaa]">
       <a href="#top" class="text-white no-underline">V / 26</a>
-      <nav aria-label="主导航" class="flex gap-5 sm:gap-8">
+      <nav aria-label="主导航" class="flex items-center gap-5 sm:gap-8">
         <a href="#services" class="transition-colors hover:text-white">Services</a>
         <a href="#about" class="transition-colors hover:text-white">About</a>
         <a href="#contact" class="transition-colors hover:text-white">Contact</a>
+        <button class="language-switch border-l border-[#242424] pl-5 text-white transition-colors hover:text-[#aaaaaa] sm:pl-8" type="button" aria-label="切换语言">繁中 / EN</button>
       </nav>
     </header>
 
@@ -310,7 +311,7 @@
 
         <div class="mt-24 flex max-w-3xl flex-col gap-7 text-sm leading-7 text-[#aaaaaa] sm:ml-[17vw] sm:mt-32 sm:flex-row sm:gap-16">
           <p class="reveal max-w-[14rem] uppercase tracking-[0.12em]">Visual systems<br />for curious people.</p>
-          <p class="reveal max-w-[23rem] text-base leading-7 text-white">我把策略、设计与代码放在同一张工作台上，做出清晰、有个性、可以被真实使用的数字体验。</p>
+          <p class="reveal max-w-[23rem] text-base leading-7 text-white" data-zh="我把策略、設計與程式碼放在同一張工作台上，做出清晰、有個性、可以被真實使用的數位體驗。" data-en="I bring strategy, design and code to the same workbench to make digital experiences that feel clear, distinct and real.">我把策略、設計與程式碼放在同一張工作台上，做出清晰、有個性、可以被真實使用的數位體驗。</p>
         </div>
 
         <div class="absolute bottom-10 right-0 hidden text-[10px] uppercase tracking-[0.2em] text-[#aaaaaa] sm:block">Scroll to explore ↓</div>
@@ -403,7 +404,7 @@
         </h2>
         <div class="mt-24 flex flex-col gap-12 sm:ml-[32vw] sm:mt-36 sm:flex-row sm:items-end sm:justify-between">
           <div class="max-w-xs text-sm leading-7 text-[#aaaaaa]">
-            <p>每月发送一封不打扰的工作信，记录正在发生的项目、链接与灵感。</p>
+            <p data-zh="每月發送一封不打擾的工作信，記錄正在發生的專案、連結與靈感。" data-en="A quiet monthly letter about current projects, links and things worth noticing.">每月發送一封不打擾的工作信，記錄正在發生的專案、連結與靈感。</p>
             <a class="footer-link mt-5 inline-block text-white" href="mailto:hello@vicky.studio">hello@vicky.studio ↗</a>
           </div>
           <p class="text-xs uppercase tracking-[0.2em] text-[#aaaaaa]">No noise.<br />Just signal.</p>
@@ -434,6 +435,22 @@
       // 少量垂直位移只作用于标记了 parallax 的标题，保持动效克制。
       const parallaxItems = document.querySelectorAll('.parallax');
       let ticking = false;
+      const languageSwitch = document.querySelector('.language-switch');
+      const translatableItems = document.querySelectorAll('[data-zh][data-en]');
+      let currentLanguage = localStorage.getItem('lin-language') || 'zh';
+
+      const applyLanguage = (language) => {
+        currentLanguage = language;
+        translatableItems.forEach((item) => {
+          item.textContent = item.dataset[language];
+        });
+        languageSwitch.textContent = language === 'zh' ? '繁中 / EN' : 'EN / 繁中';
+        document.documentElement.lang = language === 'zh' ? 'zh-Hant' : 'en';
+        localStorage.setItem('lin-language', language);
+      };
+
+      languageSwitch.addEventListener('click', () => applyLanguage(currentLanguage === 'zh' ? 'en' : 'zh'));
+      applyLanguage(currentLanguage);
       const namePop = document.querySelector('.name-pop');
       const scrollBook = document.querySelector('.scroll-book');
       const bookPages = document.querySelectorAll('.scroll-book__page');

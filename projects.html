@@ -20,10 +20,10 @@
   </head>
   <body>
     <header class="shell flex items-center justify-between border-b line py-5 text-xs uppercase tracking-[.18em] text-[#aaa]">
-      <a href="index.html" class="text-white no-underline">LIN / 00</a><a href="index.html">Close ↗</a>
+      <a href="index.html" class="text-white no-underline">LIN / 00</a><div class="flex items-center gap-5"><button class="language-switch text-white" type="button">繁中 / EN</button><a href="index.html" data-zh="關閉 ↗" data-en="Close ↗">Close ↗</a></div>
     </header>
     <main class="shell">
-      <section class="min-h-[75vh] py-28 sm:py-48"><p class="mb-24 text-xs uppercase tracking-[.2em] text-[#aaa]">01 / Selected work</p><h1 class="title uppercase">Pro<br />jects</h1></section>
+      <section class="min-h-[75vh] py-28 sm:py-48"><p class="mb-24 text-xs uppercase tracking-[.2em] text-[#aaa]" data-zh="01 / 項目集" data-en="01 / Selected work">01 / Selected work</p><h1 class="title uppercase" data-zh="項<br />目集" data-en="Pro<br />jects">Pro<br />jects</h1></section>
       <section class="border-t line py-24 sm:py-36">
         <div class="grid border-t line">
           <a href="#" class="grid grid-cols-[4rem_1fr] gap-4 border-b line py-10 no-underline sm:grid-cols-[6rem_1fr_auto] sm:items-baseline"><span class="text-xs text-[#aaa]">001</span><span class="text-4xl uppercase tracking-[-.07em] sm:text-7xl">Noma Objects</span><span class="text-xs uppercase tracking-[.15em] text-[#aaa]">Identity / Web</span></a>
@@ -33,6 +33,20 @@
         </div>
       </section>
     </main>
-    <footer class="shell border-t line py-8 text-xs uppercase tracking-[.16em] text-[#aaa]"><a href="index.html">← Return to LIN Yang</a></footer>
+    <footer class="shell border-t line py-8 text-xs uppercase tracking-[.16em] text-[#aaa]"><a href="index.html" data-zh="← 返回 LIN Yang" data-en="← Return to LIN Yang">← Return to LIN Yang</a></footer>
   </body>
+  <script>
+    const languageSwitch = document.querySelector('.language-switch');
+    const translatableItems = document.querySelectorAll('[data-zh][data-en]');
+    let currentLanguage = localStorage.getItem('lin-language') || 'zh';
+    const applyLanguage = (language) => {
+      currentLanguage = language;
+      translatableItems.forEach((item) => { item.innerHTML = item.dataset[language]; });
+      languageSwitch.textContent = language === 'zh' ? '繁中 / EN' : 'EN / 繁中';
+      document.documentElement.lang = language === 'zh' ? 'zh-Hant' : 'en';
+      localStorage.setItem('lin-language', language);
+    };
+    languageSwitch.addEventListener('click', () => applyLanguage(currentLanguage === 'zh' ? 'en' : 'zh'));
+    applyLanguage(currentLanguage);
+  </script>
 </html>

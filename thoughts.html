@@ -7,7 +7,21 @@
     <style>*{box-sizing:border-box}body{margin:0;background:#000;color:#fff;font-family:'Space Grotesk',Arial,sans-serif}.shell{width:min(100%,1600px);margin:0 auto;padding:0 clamp(1.25rem,4vw,5rem)}.title{font-size:clamp(5rem,17vw,17rem);line-height:.72;letter-spacing:-.1em;font-weight:700}.line{border-color:#242424}a{color:inherit}</style>
   </head>
   <body>
-    <header class="shell flex items-center justify-between border-b line py-5 text-xs uppercase tracking-[.18em] text-[#aaa]"><a href="index.html" class="text-white no-underline">LIN / 00</a><a href="index.html">Close ↗</a></header>
-    <main class="shell"><section class="min-h-[75vh] py-28 sm:py-48"><p class="mb-24 text-xs uppercase tracking-[.2em] text-[#aaa]">02 / Notes from the desk</p><h1 class="title uppercase">Thin<br />gs</h1></section><section class="border-t line py-24 sm:py-36"><article class="grid gap-8 border-b line py-12 sm:grid-cols-[12rem_1fr]"><p class="text-xs uppercase tracking-[.16em] text-[#aaa]">17.09.26<br />Observation</p><div><h2 class="text-4xl uppercase tracking-[-.07em] sm:text-7xl">Make room<br />for the strange.</h2><p class="mt-10 max-w-xl text-lg leading-8 text-[#aaa]">好的想法往往先以一种不合时宜的形状出现。不要急着把它修剪成标准答案。</p></div></article><article class="grid gap-8 border-b line py-12 sm:grid-cols-[12rem_1fr]"><p class="text-xs uppercase tracking-[.16em] text-[#aaa]">04.08.26<br />Working note</p><div><h2 class="text-4xl uppercase tracking-[-.07em] sm:text-7xl">Form follows<br />attention.</h2><p class="mt-10 max-w-xl text-lg leading-8 text-[#aaa]">设计不是把更多东西放进一个页面，而是决定什么值得被看见，以及它应该停留多久。</p></div></article></section></main><footer class="shell border-t line py-8 text-xs uppercase tracking-[.16em] text-[#aaa]"><a href="index.html">← Return to LIN Yang</a></footer>
+    <header class="shell flex items-center justify-between border-b line py-5 text-xs uppercase tracking-[.18em] text-[#aaa]"><a href="index.html" class="text-white no-underline">LIN / 00</a><div class="flex items-center gap-5"><button class="language-switch text-white" type="button">繁中 / EN</button><a href="index.html" data-zh="關閉 ↗" data-en="Close ↗">Close ↗</a></div></header>
+    <main class="shell"><section class="min-h-[75vh] py-28 sm:py-48"><p class="mb-24 text-xs uppercase tracking-[.2em] text-[#aaa]" data-zh="02 / 桌邊隨想" data-en="02 / Notes from the desk">02 / Notes from the desk</p><h1 class="title uppercase" data-zh="隨<br />想錄" data-en="Thin<br />gs">Thin<br />gs</h1></section><section class="border-t line py-24 sm:py-36"><article class="grid gap-8 border-b line py-12 sm:grid-cols-[12rem_1fr]"><p class="text-xs uppercase tracking-[.16em] text-[#aaa]" data-zh="17.09.26<br />觀察" data-en="17.09.26<br />Observation">17.09.26<br />Observation</p><div><h2 class="text-4xl uppercase tracking-[-.07em] sm:text-7xl">Make room<br />for the strange.</h2><p class="mt-10 max-w-xl text-lg leading-8 text-[#aaa]" data-zh="好的想法往往先以一種不合時宜的形狀出現。不要急著把它修剪成標準答案。" data-en="Good ideas often arrive in a shape that feels out of place. Do not rush to trim them into standard answers.">好的想法往往先以一種不合時宜的形狀出現。不要急著把它修剪成標準答案。</p></div></article><article class="grid gap-8 border-b line py-12 sm:grid-cols-[12rem_1fr]"><p class="text-xs uppercase tracking-[.16em] text-[#aaa]" data-zh="04.08.26<br />工作筆記" data-en="04.08.26<br />Working note">04.08.26<br />Working note</p><div><h2 class="text-4xl uppercase tracking-[-.07em] sm:text-7xl">Form follows<br />attention.</h2><p class="mt-10 max-w-xl text-lg leading-8 text-[#aaa]" data-zh="設計不是把更多東西放進一個頁面，而是決定什麼值得被看見，以及它應該停留多久。" data-en="Design is not putting more into a page. It is deciding what deserves attention and how long it should stay.">設計不是把更多東西放進一個頁面，而是決定什麼值得被看見，以及它應該停留多久。</p></div></article></section></main><footer class="shell border-t line py-8 text-xs uppercase tracking-[.16em] text-[#aaa]"><a href="index.html" data-zh="← 返回 LIN Yang" data-en="← Return to LIN Yang">← Return to LIN Yang</a></footer>
   </body>
+  <script>
+    const languageSwitch = document.querySelector('.language-switch');
+    const translatableItems = document.querySelectorAll('[data-zh][data-en]');
+    let currentLanguage = localStorage.getItem('lin-language') || 'zh';
+    const applyLanguage = (language) => {
+      currentLanguage = language;
+      translatableItems.forEach((item) => { item.innerHTML = item.dataset[language]; });
+      languageSwitch.textContent = language === 'zh' ? '繁中 / EN' : 'EN / 繁中';
+      document.documentElement.lang = language === 'zh' ? 'zh-Hant' : 'en';
+      localStorage.setItem('lin-language', language);
+    };
+    languageSwitch.addEventListener('click', () => applyLanguage(currentLanguage === 'zh' ? 'en' : 'zh'));
+    applyLanguage(currentLanguage);
+  </script>
 </html>
