@@ -117,6 +117,109 @@
         text-underline-offset: 0.2em;
       }
 
+      .name-pop {
+        position: fixed;
+        z-index: 30;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        pointer-events: none;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 500ms ease, visibility 500ms ease;
+      }
+
+      .name-pop.is-active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .name-pop::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.78);
+      }
+
+      .name-pop__text {
+        position: relative;
+        color: var(--white);
+        font-size: clamp(4.5rem, 18vw, 18rem);
+        line-height: 0.72;
+        letter-spacing: -0.1em;
+        font-weight: 700;
+        text-align: center;
+        transform: scale(0.72) rotate(-5deg);
+        transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .name-pop.is-active .name-pop__text {
+        transform: scale(1) rotate(-5deg);
+      }
+
+      .scroll-book {
+        position: fixed;
+        z-index: 20;
+        right: clamp(1rem, 3vw, 3rem);
+        bottom: 1.5rem;
+        width: min(17rem, calc(100vw - 2rem));
+        transform: translateY(calc(100% + 2rem));
+        transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .scroll-book.is-visible {
+        transform: translateY(0);
+      }
+
+      .scroll-book__cover {
+        min-height: 9rem;
+        padding: 1rem;
+        border: 1px solid var(--white);
+        background: var(--black);
+        box-shadow: -8px 8px 0 var(--white);
+      }
+
+      .scroll-book__page {
+        display: none;
+        min-height: 9rem;
+        padding: 1rem;
+        border: 1px solid var(--white);
+        background: var(--black);
+      }
+
+      .scroll-book__page.is-current {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .scroll-book__page a {
+        color: var(--white);
+        font-size: 1.5rem;
+        line-height: 0.9;
+        letter-spacing: -0.06em;
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+
+      .scroll-book__page a:hover {
+        text-decoration: underline;
+        text-underline-offset: 0.15em;
+      }
+
+      @media (max-width: 640px) {
+        .scroll-book {
+          right: 1rem;
+          bottom: 1rem;
+          width: min(13rem, calc(100vw - 2rem));
+        }
+
+        .scroll-book__cover,
+        .scroll-book__page {
+          min-height: 7.5rem;
+        }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         html {
           scroll-behavior: auto;
@@ -151,6 +254,32 @@
   </head>
 
   <body>
+    <div class="name-pop" aria-hidden="true">
+      <div class="name-pop__text">LIN<br />Yang</div>
+    </div>
+
+    <aside class="scroll-book" aria-label="页面导航">
+      <div class="scroll-book__cover">
+        <div class="flex items-start justify-between text-[10px] uppercase tracking-[0.16em] text-[#aaaaaa]">
+          <span>Keep scrolling</span>
+          <span class="book-page-number">00 / 03</span>
+        </div>
+        <p class="mt-10 text-3xl font-bold uppercase leading-[0.82] tracking-[-0.08em]">A small<br />book<br />of me.</p>
+      </div>
+      <div class="scroll-book__page" data-page="1">
+        <span class="text-[10px] uppercase tracking-[0.16em] text-[#aaaaaa]">01 / Projects</span>
+        <a href="projects.html">项目集<br /><span class="text-base tracking-normal">Selected work ↗</span></a>
+      </div>
+      <div class="scroll-book__page" data-page="2">
+        <span class="text-[10px] uppercase tracking-[0.16em] text-[#aaaaaa]">02 / Notes</span>
+        <a href="thoughts.html">随想录<br /><span class="text-base tracking-normal">Small thoughts ↗</span></a>
+      </div>
+      <div class="scroll-book__page" data-page="3">
+        <span class="text-[10px] uppercase tracking-[0.16em] text-[#aaaaaa]">03 / About</span>
+        <a href="about.html">个人经历<br /><span class="text-base tracking-normal">The long version ↗</span></a>
+      </div>
+    </aside>
+
     <header class="site-shell flex items-center justify-between border-b hairline py-5 text-xs uppercase tracking-[0.18em] text-[#aaaaaa]">
       <a href="#top" class="text-white no-underline">V / 26</a>
       <nav aria-label="主导航" class="flex gap-5 sm:gap-8">
@@ -305,12 +434,32 @@
       // 少量垂直位移只作用于标记了 parallax 的标题，保持动效克制。
       const parallaxItems = document.querySelectorAll('.parallax');
       let ticking = false;
+      const namePop = document.querySelector('.name-pop');
+      const scrollBook = document.querySelector('.scroll-book');
+      const bookPages = document.querySelectorAll('.scroll-book__page');
+      const bookPageNumber = document.querySelector('.book-page-number');
+      const pageSections = [
+        document.querySelector('#services'),
+        document.querySelector('#about'),
+        document.querySelector('#contact'),
+      ];
+
+      const updateBook = () => {
+        const scrollDistance = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+        const progress = window.scrollY / scrollDistance;
+        const currentPage = Math.min(3, Math.max(1, Math.ceil(progress * 3)));
+        bookPages.forEach((page) => page.classList.toggle('is-current', Number(page.dataset.page) === currentPage));
+        bookPageNumber.textContent = `${String(currentPage).padStart(2, '0')} / 03`;
+        scrollBook.classList.toggle('is-visible', window.scrollY > window.innerHeight * 0.65);
+        namePop.classList.toggle('is-active', pageSections.some((section) => section && Math.abs(section.getBoundingClientRect().top) < window.innerHeight * 0.16));
+      };
 
       const updateParallax = () => {
         const offset = Math.min(window.scrollY * 0.08, 40);
         parallaxItems.forEach((item) => {
           item.style.transform = item.classList.contains('is-visible') ? `translateY(${offset}px)` : '';
         });
+        updateBook();
         ticking = false;
       };
 
