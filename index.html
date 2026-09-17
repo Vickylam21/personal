@@ -117,6 +117,18 @@
         text-underline-offset: 0.2em;
       }
 
+      .rain-layer {
+        position: fixed;
+        z-index: 5;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 24vh;
+        pointer-events: none;
+        opacity: 0.72;
+      }
+
       .name-pop {
         position: fixed;
         z-index: 30;
@@ -418,6 +430,8 @@
       <a href="#top" class="text-white no-underline">Back to top ↑</a>
     </footer>
 
+    <canvas class="rain-layer" aria-hidden="true"></canvas>
+
     <script>
       // 只在元素进入视口时播放一次入场，避免滚动时持续抖动。
       const revealItems = document.querySelectorAll('.reveal');
@@ -486,6 +500,72 @@
           ticking = true;
         }
       }, { passive: true });
+
+      // 底部低频雨滴：细线、短暂存在，并用渐变拖尾逐帧淡出。
+      const rainCanvas = document.querySelector('.rain-layer');
+      const rainContext = rainCanvas.getContext('2d');
+      const rainDrops = [];
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let rainFrame;
+      let lastRainTime = 0;
+
+      const resizeRainCanvas = () => {
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        rainCanvas.width = window.innerWidth * pixelRatio;
+        rainCanvas.height = window.innerHeight * 0.24 * pixelRatio;
+        rainCanvas.style.height = `${window.innerHeight * 0.24}px`;
+        rainContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      };
+
+      const createRainDrop = (now) => {
+        const height = window.innerHeight * 0.24;
+        rainDrops.push({
+          x: Math.random() * window.innerWidth,
+          y: -12,
+          length: 18 + Math.random() * 30,
+          speed: 0.08 + Math.random() * 0.1,
+          born: now,
+          life: 1200 + Math.random() * 700,
+        });
+        if (rainDrops.length > Math.max(18, Math.floor(window.innerWidth / 65))) rainDrops.shift();
+        return height;
+      };
+
+      const animateRain = (now) => {
+        const width = window.innerWidth;
+        const height = window.innerHeight * 0.24;
+        rainContext.clearRect(0, 0, width, height);
+        if (!reducedMotion.matches && now - lastRainTime > 180) {
+          createRainDrop(now);
+          lastRainTime = now;
+        }
+
+        rainDrops.forEach((drop) => {
+          const age = now - drop.born;
+          const progress = age / drop.life;
+          drop.y += drop.speed * (now - (drop.lastFrame || now));
+          drop.lastFrame = now;
+          const opacity = Math.sin(Math.PI * Math.min(progress, 1)) * 0.35;
+          const trail = rainContext.createLinearGradient(drop.x, drop.y - drop.length, drop.x, drop.y);
+          trail.addColorStop(0, `rgba(255, 255, 255, 0)`);
+          trail.addColorStop(1, `rgba(255, 255, 255, ${opacity})`);
+          rainContext.beginPath();
+          rainContext.strokeStyle = trail;
+          rainContext.lineWidth = 0.6;
+          rainContext.moveTo(drop.x, drop.y - drop.length);
+          rainContext.lineTo(drop.x, drop.y);
+          rainContext.stroke();
+        });
+
+        for (let index = rainDrops.length - 1; index >= 0; index -= 1) {
+          if (now - rainDrops[index].born > rainDrops[index].life || rainDrops[index].y > height + 10) rainDrops.splice(index, 1);
+        }
+        rainFrame = window.requestAnimationFrame(animateRain);
+      };
+
+      resizeRainCanvas();
+      window.addEventListener('resize', resizeRainCanvas);
+      rainFrame = window.requestAnimationFrame(animateRain);
     </script>
   </body>
 </html>
