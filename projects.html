@@ -35,18 +35,6 @@
     </main>
     <footer class="shell border-t line py-8 text-xs uppercase tracking-[.16em] text-[#aaa]"><a href="index.html" data-zh="← 返回 LIN Yang" data-en="← Return to LIN Yang">← Return to LIN Yang</a></footer>
   </body>
-  <script>
-    const languageSwitch = document.querySelector('.language-switch');
-    const translatableItems = document.querySelectorAll('[data-zh][data-en]');
-    let currentLanguage = localStorage.getItem('lin-language') || 'zh';
-    const applyLanguage = (language) => {
-      currentLanguage = language;
-      translatableItems.forEach((item) => { item.innerHTML = item.dataset[language]; });
-      languageSwitch.textContent = language === 'zh' ? '繁中 / EN' : 'EN / 繁中';
-      document.documentElement.lang = language === 'zh' ? 'zh-Hant' : 'en';
-      localStorage.setItem('lin-language', language);
-    };
-    languageSwitch.addEventListener('click', () => applyLanguage(currentLanguage === 'zh' ? 'en' : 'zh'));
-    applyLanguage(currentLanguage);
-  </script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
 </html>
